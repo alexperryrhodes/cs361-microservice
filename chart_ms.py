@@ -4,10 +4,13 @@ from os.path import exists
 import time
 
 
-def chart():
-
+def chart_builder():
+    
+    # Logs the start of the process
     start_time = time.time()
-
+    
+    # Checks for existence of JSON file
+    # Prints wait statement plus time waiting until JSON is found
     while not exists('chart.json'):
         print('Waiting for file...')
         print(f'{round(time.time() - start_time)} seconds since process began.\n')
@@ -17,7 +20,7 @@ def chart():
         data = json.load(f)
         print('File Opened Successfully!')
 
-    # Optionals
+    # Series of if statements allow for optionals in JSON data
     if 'group' in  data:
         color = data['group']
     else:
@@ -48,7 +51,7 @@ def chart():
     else:
         export_location = ""
 
-    # Line Chart
+    # Creates Line Chart
     if data['graph_type'] == 'line':
         fig = px.line(
             height=data['graph_height']
@@ -63,7 +66,7 @@ def chart():
         fig.write_image(export_location + '.' + data['export_type'])
         print('Line graph exported successfully!\n')
     
-    # Bar Chart
+    # Creates Bar Chart
     if data['graph_type'] == 'bar':
         fig = px.bar(
             barmode='group'
@@ -79,7 +82,7 @@ def chart():
         fig.write_image(export_location + '.' + data['export_type'])
         print('Bar graph exported successfully!\n')
 
-    # Scatter Chart
+    # Creates Scatter Chart
     if data['graph_type'] == 'scatter':
         fig = px.scatter(
             height=data['graph_height']
@@ -93,5 +96,3 @@ def chart():
             )
         fig.write_image(export_location + '.' + data['export_type'])
         print('Scatter graph exported successfully!\n')
-
-chart()
